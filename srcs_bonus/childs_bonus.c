@@ -1,0 +1,99 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   childs_bonus.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eviala <eviala@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/13 10:49:41 by eviala            #+#    #+#             */
+/*   Updated: 2024/08/15 13:01:32 by eviala           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "pipex_bonus.h"
+
+// char	*verif_path_cmd(t_pipex *pipex)
+// {
+// 	char	*path;
+
+// 	if (!ft_check_is_path(pipex->cmd_args[0]))
+// 	{
+// 		path = get_path(pipex->cmd_args[0], pipex->env);
+// 	}
+// 	else
+// 	{
+// 		if (access(pipex->cmd_args[0], F_OK | X_OK) == -1)
+// 		{
+// 			ft_free_tab(pipex->cmd_args);
+// 			ft_error("Path Not Valide");
+// 		}
+// 		path = ft_strdup(pipex->cmd_args[0]);
+// 	}
+// 	if (!path)
+// 	{
+// 		ft_free_tab(pipex->cmd_args);
+// 		ft_error("Command argv[1] not found");
+// 	}
+// 	return (path);
+// }
+
+char	*verif_path_cmd(t_pipex *pipex)
+{
+	char	*path;
+
+	if (!ft_check_is_path(pipex->cmd_args[0]))
+		path = get_path(pipex->cmd_args[0], pipex->env);
+	else
+		path = ft_strdup(pipex->cmd_args[0]);
+	if (!path)
+	{
+		ft_free_tab(pipex->cmd_args);
+		ft_error("Command argv[1] not found");
+	}
+	if ((access(path, X_OK | F_OK) != 0))
+	{
+		free(path);
+		ft_printf(2, "command not found : %s\n", pipex->cmd_args[0]);
+		ft_free_tab(pipex->cmd_args);
+		exit(1);
+	}
+	return (path);
+}
+
+static void	aux_dup2(int zero, int first)
+{
+	if (dup2(zero, 0) == -1 || dup2(first, 1) == -1)
+	{
+		perror("dup2 failed");
+		exit(1);
+	}
+}
+
+void	child(t_pipex *pipex)
+{
+	if (pipex->idx == 0)
+	{
+		get_infile(pipex);
+		aux_dup2(pipex->infile, pipex->pipe[1]);
+		close(pipex->infile);
+	}
+	else if (pipex->idx == pipex->cmd_nbrs - 1)
+	{
+		get_outfile(pipex);
+		aux_dup2(pipex->pipe[2 * pipex->idx - 2], pipex->outfile);
+		close(pipex->outfile);
+	}
+	else
+		aux_dup2(pipex->pipe[2 * pipex->idx - 2], pipex->pipe[2 * pipex->idx
+			+ 1]);
+	close_pipes(pipex);
+	pipex->cmd_args = ft_split(pipex->argv[2 + pipex->here_doc + pipex->idx],
+			' ');
+	if (!(pipex->cmd_args))
+		ft_error("Memory Alloc Failed");
+	char *(path) = verif_path_cmd(pipex);
+	if (!(path))
+		child_free(pipex, path);
+	execve(path, pipex->cmd_args, pipex->env);
+	child_free(pipex, path);
+}
