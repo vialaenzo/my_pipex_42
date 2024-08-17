@@ -6,7 +6,7 @@
 /*   By: eviala <eviala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 10:49:41 by eviala            #+#    #+#             */
-/*   Updated: 2024/08/15 13:01:32 by eviala           ###   ########.fr       */
+/*   Updated: 2024/08/17 14:19:23 by eviala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ char	*verif_path_cmd(t_pipex *pipex)
 		free(path);
 		ft_printf(2, "command not found : %s\n", pipex->cmd_args[0]);
 		ft_free_tab(pipex->cmd_args);
+		free(pipex->pipe);
 		exit(1);
 	}
 	return (path);

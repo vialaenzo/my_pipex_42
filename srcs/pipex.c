@@ -6,7 +6,7 @@
 /*   By: eviala <eviala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 19:02:50 by eviala            #+#    #+#             */
-/*   Updated: 2024/08/14 11:40:57 by eviala           ###   ########.fr       */
+/*   Updated: 2024/08/17 13:32:47 by eviala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,13 @@ int	main(int argc, char **argv, char **env)
 	if (pipe(pipex.pipe_fd) < 0)
 		ft_error("Pipe Failed");
 	pipex.pid1 = fork();
+	if ((pipex.pid1 < 0))
+		ft_error("Fork Failed");
 	if (pipex.pid1 == 0)
 		first_child(pipex);
 	pipex.pid2 = fork();
+	if ((pipex.pid2 < 0))
+		ft_error("Fork Failed");
 	if (pipex.pid2 == 0)
 		second_child(pipex);
 	close_pipes(&pipex);

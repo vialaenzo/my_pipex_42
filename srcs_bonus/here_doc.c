@@ -6,7 +6,7 @@
 /*   By: eviala <eviala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 11:34:39 by eviala            #+#    #+#             */
-/*   Updated: 2024/08/15 09:48:08 by eviala           ###   ########.fr       */
+/*   Updated: 2024/08/17 14:01:24 by eviala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	args_in(char *arg, t_pipex *pipex)
 {
-	if (arg && !ft_strncmp("here_doc", arg, 9))
+	if (arg && !ft_strncmp("here_doc", arg, 8))
 	{
 		pipex->here_doc = 1;
 		return (6);
@@ -32,13 +32,12 @@ void	here_doc(char *argv, t_pipex *pipex)
 	int (file) = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
 	if (file < 0)
 		ft_error("Here_doc Failed");
-	ft_printf(1, "go while 1");
 	while (1)
 	{
 		ft_printf(1, "heredoc> ");
 		buf = get_next_line(0);
 		if (!buf)
-			exit(1);
+			break;
 		if (!ft_strncmp(argv, buf, ft_strlen(argv) + 1))
 		{
 			free(buf);

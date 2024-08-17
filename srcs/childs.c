@@ -6,7 +6,7 @@
 /*   By: eviala <eviala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 15:45:04 by eviala            #+#    #+#             */
-/*   Updated: 2024/08/15 11:59:19 by eviala           ###   ########.fr       */
+/*   Updated: 2024/08/17 13:52:43 by eviala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	both_child(t_pipex pipex, char **cmd_args)
 		exit(1);
 	}
 	execve(path, cmd_args, pipex.env);
+	free(path);
 	ft_free_tab(cmd_args);
 	exit(1);
 }
@@ -53,7 +54,7 @@ void	first_child(t_pipex pipex)
 	dup2(fd, 0);
 	close(fd);
 	cmd_args = ft_split(pipex.argv[2], ' ');
-	if (!cmd_args)
+	if (!(cmd_args))
 		ft_error("CMDS_ARGS");
 	both_child(pipex, cmd_args);
 }
@@ -68,14 +69,11 @@ void	second_child(t_pipex pipex)
 	int (fd) = open(pipex.argv[pipex.argc - 1], O_CREAT
 			| O_RDWR | O_TRUNC, 0000644);
 	if (fd < 0)
-	{
-		close(fd);
 		ft_error("Outfile");
-	}
 	dup2(fd, 1);
 	close(fd);
 	cmd_args = ft_split(pipex.argv[pipex.argc - 2], ' ');
-	if (!cmd_args)
+	if (!(cmd_args))
 		ft_error("CMD_ARGS");
 	both_child(pipex, cmd_args);
 }

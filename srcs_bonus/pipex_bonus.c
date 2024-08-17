@@ -6,7 +6,7 @@
 /*   By: eviala <eviala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 11:33:44 by eviala            #+#    #+#             */
-/*   Updated: 2024/08/15 13:01:59 by eviala           ###   ########.fr       */
+/*   Updated: 2024/08/17 13:49:44 by eviala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,22 @@ void	init_var(t_pipex *pipex, int argc, char **argv, char **env)
 	pipex->argc = argc;
 	pipex->idx = -1;
 	pipex->infile_char = pipex->argv[1];
-	pipex->outfile_char = pipex->argv[pipex->argc -1];
+	pipex->outfile_char = pipex->argv[pipex->argc - 1];
 	pipex->cmd_nbrs = pipex->argc - 3 - pipex->here_doc;
 	pipex->pipe_nbrs = 2 * (pipex->cmd_nbrs - 1);
 	pipex->pipe = (int *)malloc(sizeof(int) * pipex->pipe_nbrs);
 	if (!(pipex->pipe))
 		ft_error("Pipe malloc failed");
+}
+
+void	cleanup(t_pipex *pipex)
+{
+	// Libérer le tableau de pipes
+	if (pipex->pipe)
+		free(pipex->pipe);
+	// Supprimer le fichier temporaire si here_doc a été utilisé
+	if (pipex->here_doc)
+		unlink(".heredoc_tmp");
 }
 
 int	main(int argc, char **argv, char **env)
@@ -61,7 +71,6 @@ int	main(int argc, char **argv, char **env)
 	}
 	close_pipes(&pipex);
 	waitpid(-1, NULL, 0);
-	if (pipex.here_doc)
-		unlink(".heredoc_tmp");
+	cleanup(&pipex);
 	return (0);
 }

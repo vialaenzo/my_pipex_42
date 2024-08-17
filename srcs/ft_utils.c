@@ -6,7 +6,7 @@
 /*   By: eviala <eviala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 15:15:05 by eviala            #+#    #+#             */
-/*   Updated: 2024/08/15 11:59:13 by eviala           ###   ########.fr       */
+/*   Updated: 2024/08/17 13:37:30 by eviala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	close_pipes(t_pipex *pipex)
 
 int	ft_check_is_path(char *cmd)
 {
+	if (!(cmd))
+		return (0);
 	if (!(ft_strchr(cmd, '/')))
 		return (0);
 	return (1);

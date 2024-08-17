@@ -6,7 +6,7 @@
 /*   By: eviala <eviala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 10:49:39 by eviala            #+#    #+#             */
-/*   Updated: 2024/08/15 12:18:19 by eviala           ###   ########.fr       */
+/*   Updated: 2024/08/17 14:05:33 by eviala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	get_infile(t_pipex *pipex)
 	if (pipex->infile < 0)
 	{
 		pipe_free(pipex);
-		ft_error("Infile invalid but pass");
+		ft_error("Infile");
 	}
 }
 
@@ -58,6 +58,6 @@ void	get_outfile(t_pipex *pipex)
 	if (pipex->outfile < 0)
 	{
 		pipe_free(pipex);
-		ft_error("Outfile invalid");
+		ft_error("Outfile");
 	}
 }
