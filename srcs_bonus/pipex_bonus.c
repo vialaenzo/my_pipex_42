@@ -6,7 +6,7 @@
 /*   By: eviala <eviala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 11:33:44 by eviala            #+#    #+#             */
-/*   Updated: 2024/08/17 13:49:44 by eviala           ###   ########.fr       */
+/*   Updated: 2024/08/18 16:34:57 by eviala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	pipe_gen(t_pipex *pipex)
 	}
 }
 
-void	init_var(t_pipex *pipex, int argc, char **argv, char **env)
+void	init_var_base(t_pipex *pipex, int argc, char **argv, char **env)
 {
 	pipex->argv = argv;
 	pipex->env = env;
@@ -45,10 +45,8 @@ void	init_var(t_pipex *pipex, int argc, char **argv, char **env)
 
 void	cleanup(t_pipex *pipex)
 {
-	// Libérer le tableau de pipes
 	if (pipex->pipe)
 		free(pipex->pipe);
-	// Supprimer le fichier temporaire si here_doc a été utilisé
 	if (pipex->here_doc)
 		unlink(".heredoc_tmp");
 }
@@ -59,9 +57,9 @@ int	main(int argc, char **argv, char **env)
 
 	if (argc < args_in(argv[1], &pipex))
 		ft_error("Invalid Arguments");
-	init_var(&pipex, argc, argv, env);
+	init_var_base(&pipex, argc, argv, env);
 	if (pipex.argv[1] && !ft_strncmp("here_doc", pipex.argv[1], 8))
-		here_doc(pipex.argv[2], &pipex);
+		here_doc(&pipex);
 	pipe_gen(&pipex);
 	while (++(pipex.idx) < pipex.cmd_nbrs)
 	{
@@ -70,7 +68,9 @@ int	main(int argc, char **argv, char **env)
 			child(&pipex);
 	}
 	close_pipes(&pipex);
-	waitpid(-1, NULL, 0);
+	int (i) = 0;
+	while ((++i) <= pipex.cmd_nbrs)
+		wait(NULL);
 	cleanup(&pipex);
 	return (0);
 }

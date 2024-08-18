@@ -6,7 +6,7 @@
 /*   By: eviala <eviala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 11:56:58 by eviala            #+#    #+#             */
-/*   Updated: 2024/08/17 13:40:09 by eviala           ###   ########.fr       */
+/*   Updated: 2024/08/18 16:24:08 by eviala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 static int	count_words(const char *str, char c)
 {
-	int(i) = 0;
-	int(trigger) = 0;
+	int (i) = 0;
+	int (trigger) = 0;
 	while (*str)
 	{
 		if (*str != c && trigger == 0)
@@ -54,11 +54,11 @@ char	**ft_split(char const *s, char c)
 	char **(split) = malloc((words_count + 1) * sizeof(char *));
 	if (!split)
 		return (NULL);
-	size_t (i) = 0;
-	size_t (j) = 0;
+	size_t(i) = -1;
+	size_t(j) = 0;
 	int (index) = -1;
-	size_t (len) = ft_strlen(s);
-	while (i <= len)
+	size_t(len) = ft_strlen(s);
+	while (++i <= len)
 	{
 		if (s[i] != c && index < 0)
 			index = i;
@@ -67,13 +67,10 @@ char	**ft_split(char const *s, char c)
 			split[j] = word_dup(s, index, i);
 			if (!split[j++])
 			{
-				ft_free_tab(split);
-				return (NULL);
+				return (ft_free_tab(split), NULL);
 			}
 			index = -1;
 		}
-		i++;
 	}
-	split[j] = NULL;
-	return (split);
+	return (split[j] = NULL, split);
 }

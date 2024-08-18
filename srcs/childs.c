@@ -6,7 +6,7 @@
 /*   By: eviala <eviala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 15:45:04 by eviala            #+#    #+#             */
-/*   Updated: 2024/08/17 13:52:43 by eviala           ###   ########.fr       */
+/*   Updated: 2024/08/18 12:12:22 by eviala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,16 @@ void	ft_free_child(char *str, char **cmd_args)
 	ft_error(str);
 }
 
-void	both_child(t_pipex pipex, char **cmd_args)
+void	both_child(t_pipex *pipex, char **cmd_args)
 {
-	char	*path;
-
+	char *(path) = NULL;
 	if (!ft_check_is_path(cmd_args[0]))
-		path = get_path(cmd_args[0], pipex.env);
+	{
+		if (pipex->env)
+			path = get_path(cmd_args[0], pipex->env);
+		else
+			ft_free_child("Environment", cmd_args);
+	}
 	else
 		path = ft_strdup(cmd_args[0]);
 	if (!path)
@@ -35,7 +39,7 @@ void	both_child(t_pipex pipex, char **cmd_args)
 		ft_free_tab(cmd_args);
 		exit(1);
 	}
-	execve(path, cmd_args, pipex.env);
+	execve(path, cmd_args, pipex->env);
 	free(path);
 	ft_free_tab(cmd_args);
 	exit(1);
@@ -56,7 +60,7 @@ void	first_child(t_pipex pipex)
 	cmd_args = ft_split(pipex.argv[2], ' ');
 	if (!(cmd_args))
 		ft_error("CMDS_ARGS");
-	both_child(pipex, cmd_args);
+	both_child(&pipex, cmd_args);
 }
 
 void	second_child(t_pipex pipex)
@@ -75,5 +79,5 @@ void	second_child(t_pipex pipex)
 	cmd_args = ft_split(pipex.argv[pipex.argc - 2], ' ');
 	if (!(cmd_args))
 		ft_error("CMD_ARGS");
-	both_child(pipex, cmd_args);
+	both_child(&pipex, cmd_args);
 }

@@ -6,7 +6,7 @@
 /*   By: eviala <eviala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 11:34:39 by eviala            #+#    #+#             */
-/*   Updated: 2024/08/17 14:01:24 by eviala           ###   ########.fr       */
+/*   Updated: 2024/08/18 16:43:01 by eviala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	args_in(char *arg, t_pipex *pipex)
 	}
 }
 
-void	here_doc(char *argv, t_pipex *pipex)
+void	here_doc(t_pipex *pipex)
 {
 	char *(buf);
 	int (file) = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0000644);
@@ -37,8 +37,9 @@ void	here_doc(char *argv, t_pipex *pipex)
 		ft_printf(1, "heredoc> ");
 		buf = get_next_line(0);
 		if (!buf)
-			break;
-		if (!ft_strncmp(argv, buf, ft_strlen(argv) + 1))
+			break ;
+		if (!ft_strncmp(pipex->argv[2], buf, ft_strlen(pipex->argv[2]))
+			&& buf[ft_strlen(pipex->argv[2])] == '\n')
 		{
 			free(buf);
 			break ;

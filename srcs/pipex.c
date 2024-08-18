@@ -6,7 +6,7 @@
 /*   By: eviala <eviala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/02 19:02:50 by eviala            #+#    #+#             */
-/*   Updated: 2024/08/17 13:32:47 by eviala           ###   ########.fr       */
+/*   Updated: 2024/08/18 11:32:54 by eviala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	main(int argc, char **argv, char **env)
 	t_pipex	pipex;
 
 	if (argc != 5)
-		return (ft_error("infile cm1 cm2 outfile"), 1);
+		ft_error("infile cm1 cm2 outfile");
 	initialiation_var(argc, argv, env, &pipex);
 	if (pipe(pipex.pipe_fd) < 0)
 		ft_error("Pipe Failed");

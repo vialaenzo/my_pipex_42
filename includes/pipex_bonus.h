@@ -6,7 +6,7 @@
 /*   By: eviala <eviala@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:37:22 by eviala            #+#    #+#             */
-/*   Updated: 2024/08/15 13:01:27 by eviala           ###   ########.fr       */
+/*   Updated: 2024/08/18 15:04:02 by eviala           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void		child(t_pipex *pipex);
                              ______
 			    |______|                   */
 
-void		here_doc(char *argv, t_pipex *pipex);
+void		here_doc(t_pipex *pipex);
 int			args_in(char *arg, t_pipex *pipex);
 
 #endif
